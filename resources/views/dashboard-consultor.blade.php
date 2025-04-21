@@ -10,5 +10,6 @@
     @endif
     <p>Només pots visualitzar dades.</p>
     <a href="{{ route('masters.consultor') }}" class="btn btn-info">Veure Màsters</a>
+    <a href="{{ route('alumnes.consultor') }}" class="btn btn-info">Veure Alumnes</a>
 </div>
 @endsection

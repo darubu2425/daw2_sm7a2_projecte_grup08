@@ -31,8 +31,8 @@
             <input type="text" class="form-control" id="telefon" name="telefon" required>
         </div>
         <div class="mb-3">
-            <label for="master_id" class="form-label">Màster</label>
-            <select class="form-control" id="master_id" name="master" required>
+            <label for="master" class="form-label">Màster</label>
+            <select class="form-control" id="master_id" name="master_id" required>
                 @foreach($masters as $master)
                     <option value="{{ $master->identificador }}">{{ $master->nom }}</option>
                 @endforeach

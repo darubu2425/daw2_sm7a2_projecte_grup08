@@ -29,13 +29,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // =============================================
+    // Rutas de visualización para todos los usuarios autenticados
+    Route::get('/masters/{master}', [MasterController::class, 'show'])->name('masters.show');
+    Route::get('/alumnes/{alumne}', [AlumneController::class, 'show'])->name('alumnes.show');
+
+    // NUEVAS RUTAS PARA EXPORTAR PDF (añade estas líneas)
+    Route::get('/masters/{master}/export-pdf', [MasterController::class, 'exportPdf'])->name('masters.exportPdf');
+    Route::get('/alumnes/{alumne}/export-pdf', [AlumneController::class, 'exportPdf'])->name('alumnes.exportPdf');
+
     // RUTES PROTEGIDES PER ADMIN (Middleware AdminAuth)
-    // =============================================
     Route::middleware(['adminAuth'])->group(function () {
-        // CRUD Completo
-        Route::resource('masters', MasterController::class);
-        Route::resource('alumnes', AlumneController::class);
+        // CRUD Completo (excepto show que ya está definido arriba)
+        Route::resource('masters', MasterController::class)->except(['show']);
+        Route::resource('alumnes', AlumneController::class)->except(['show']);
         
         // GESTIÓ D'USUARIS (Nou)
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
@@ -49,15 +55,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         })->name('dashboard-admin');
     });
 
-    // =============================================
     // RUTES PER CONSULTORS
-    // =============================================
     Route::get('/dashboard-consultor', function () {
         return view('dashboard-consultor');
     })->name('dashboard-consultor');
 
-    // Vista específica de masters per a consultors
+    // Vistas listados para consultores (usan el mismo método index que los admin)
     Route::get('/consultor/masters', [MasterController::class, 'index'])->name('masters.consultor');
+    Route::get('/consultor/alumnes', [AlumneController::class, 'index'])->name('alumnes.consultor');
 });
 
 require __DIR__.'/auth.php';

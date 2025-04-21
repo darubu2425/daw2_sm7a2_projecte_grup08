@@ -16,23 +16,27 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
+        // Si ya está autenticado, redirigir al dashboard correspondiente
+        if (Auth::check()) {
+            return $this->redirectToDashboard();
+        }
+        
         return view('auth.login');
     }
 
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request)
+    public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
         $request->session()->regenerate();
-    
-        // Redirige según el rol (usando los nombres de ruta exactos de tu web.php)
-        return redirect()->intended(
-            auth()->user()->role === 'admin' 
-                ? route('dashboard-admin')  // Nombre real en web.php
-                : route('dashboard-consultor')  // Nombre real en web.php
-        );
+        
+        // Limpiar cualquier redirección previa no autorizada
+        $this->clearIntendedUrl();
+        
+        // Redirigir al dashboard según el rol
+        return $this->redirectToDashboard();
     }
 
     /**
@@ -43,9 +47,28 @@ class AuthenticatedSessionController extends Controller
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    /**
+     * Redirige al dashboard según el rol del usuario
+     */
+    protected function redirectToDashboard(): RedirectResponse
+    {
+        return redirect()->route(
+            auth()->user()->role === 'admin' 
+                ? 'dashboard-admin' 
+                : 'dashboard-consultor'
+        );
+    }
+    
+    /**
+     * Limpia la URL previa almacenada para evitar redirecciones no deseadas
+     */
+    protected function clearIntendedUrl(): void
+    {
+        session()->forget('url.intended');
     }
 }

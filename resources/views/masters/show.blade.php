@@ -23,10 +23,15 @@
                     <td>{{ $master->director }}</td>
                 </tr>
             </table>
-            <a href="{{ route('masters.index') }}" class="btn btn-secondary">Tornar</a>
-            @if(auth()->user()->role === 'admin')
-                <a href="{{ route('masters.edit', $master->identificador) }}" class="btn btn-warning">Editar</a>
-            @endif
+            <div class="card-footer">
+                <a href="{{ auth()->user()->role === 'admin' ? route('masters.index') : route('masters.consultor') }}" class="btn btn-secondary">Tornar</a>
+                @if(auth()->user()->role === 'admin')
+                    <a href="{{ route('masters.edit', $master->identificador) }}" class="btn btn-warning">Editar</a>
+                @endif
+                <a href="{{ route('masters.exportPdf', $master->identificador) }}" class="btn btn-danger">
+                    <i class="fas fa-file-pdf"></i> Exportar a PDF
+                </a>
+            </div>
         </div>
     </div>
 </div>

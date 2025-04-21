@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Alumne;
 use App\Models\Master;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AlumneController extends Controller
 {
@@ -13,7 +14,7 @@ class AlumneController extends Controller
      */
     public function index()
     {
-        $alumnes = Alumne::with('master')->get(); // Carrega la relació master
+        $alumnes = Alumne::with('master')->get();
         return view('alumnes.index', compact('alumnes'));
     }
 
@@ -38,7 +39,7 @@ class AlumneController extends Controller
             'ciutat' => 'required|string',
             'pais' => 'required|string',
             'telefon' => 'required|string',
-            'master' => 'required|exists:masters,identificador'
+            'master_id' => 'required|exists:masters,identificador'
         ]);
 
         Alumne::create($request->all());
@@ -93,5 +94,13 @@ class AlumneController extends Controller
         $alumne->delete();
         return redirect()->route('alumnes.index')
             ->with('success', 'Alumne esborrat correctament!');
+    }
+
+    public function exportPdf($id)
+    {
+        $alumne = Alumne::with('master')->findOrFail($id);
+        $pdf = Pdf::loadView('alumnes.pdf', compact('alumne'));
+        
+        return $pdf->download('alumne-'.$alumne->identificador.'.pdf');
     }
 }
