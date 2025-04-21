@@ -12,7 +12,10 @@
         @if(auth()->check())
             <div class="text-end mb-4">
                 <span class="me-3">Hola, {{ auth()->user()->name }}</span>
-                <a href="{{ route('logout') }}" class="btn btn-sm btn-outline-danger">Tancar sessió</a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Tancar sessió</button>
+                </form>
             </div>
         @endif
 

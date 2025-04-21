@@ -7,9 +7,9 @@
 </head>
 <body>
     <h1>Funcionament de l'aplicació</h1>
-    <p>Roles:</p>
+    <p>Rols:</p>
     <ul>
-        <li><strong>Admin</strong>: Pot gestionar mestres i alumnes.</li>
+        <li><strong>Admin</strong>: Pot gestionar masters i alumnes.</li>
         <li><strong>Consultor</strong>: Només pot visualitzar dades.</li>
     </ul>
     <a href="{{ route('inici') }}">Tornar a l'inici</a>
