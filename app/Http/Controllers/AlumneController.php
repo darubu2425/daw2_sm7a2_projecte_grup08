@@ -77,7 +77,7 @@ class AlumneController extends Controller
             'ciutat' => 'required|string',
             'pais' => 'required|string',
             'telefon' => 'required|string',
-            'master' => 'required|exists:masters,identificador'
+            'master_id' => 'required|exists:masters,identificador'
         ]);
 
         $alumne->update($request->all());

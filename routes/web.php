@@ -30,8 +30,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Rutas de visualización para todos los usuarios autenticados
-    Route::get('/masters/{master}', [MasterController::class, 'show'])->name('masters.show');
-    Route::get('/alumnes/{alumne}', [AlumneController::class, 'show'])->name('alumnes.show');
+    // Route::get('/masters/{master}', [MasterController::class, 'show'])->name('masters.show');
+    // Route::get('/alumnes/{alumne}', [AlumneController::class, 'show'])->name('alumnes.show');
+
+    Route::get('/masters/{master}', [MasterController::class, 'show'])
+        ->whereNumber('master')
+        ->name('masters.show');
+
+    Route::get('/alumnes/{alumne}', [AlumneController::class, 'show'])
+        ->whereNumber('alumne')
+        ->name('alumnes.show');
+
 
     // NUEVAS RUTAS PARA EXPORTAR PDF (añade estas líneas)
     Route::get('/masters/{master}/export-pdf', [MasterController::class, 'exportPdf'])->name('masters.exportPdf');
